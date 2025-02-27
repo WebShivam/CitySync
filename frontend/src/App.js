@@ -1,25 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import { supabase } from "./supabaseClient";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  useEffect(() => {
+    async function testDB() {
+      const { data, error } = await supabase.from("users").select("*");
+      if (error) console.error(error);
+      else console.log(data);
+    }
+    testDB();
+  }, []);
+
+  return <h1>Supabase Connected (Check Console)</h1>;
 }
 
 export default App;
