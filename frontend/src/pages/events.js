@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
+import QRGenerator from "../components/QRGenerator";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
@@ -8,12 +9,8 @@ export default function Events() {
   useEffect(() => {
     async function fetchEvents() {
       const { data, error } = await supabase.from("events").select("*");
-      if (error) {
-        console.error("Error fetching events:", error);
-      } else {
-        console.log("Events fetched:", data);
-        setEvents(data);
-      }
+      if (error) console.error("Error fetching events:", error.message);
+      else setEvents(data);
       setLoading(false);
     }
     fetchEvents();
@@ -31,6 +28,7 @@ export default function Events() {
             <p>{event.description}</p>
             <p><strong>Location:</strong> {event.location}</p>
             <p><strong>Date:</strong> {new Date(event.date).toLocaleString()}</p>
+            <QRGenerator eventId={event.id} /> {/* 🔹 QR Code */}
           </div>
         ))
       }

@@ -1,33 +1,21 @@
-import { useEffect, useState } from "react";
-import { supabase } from "./supabaseClient";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import Auth from "./components/Auth";
+import Events from "./pages/Events";
+import Home from "./pages/Home"; // We'll create this next
 
 function App() {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    async function fetchUsers() {
-      const { data, error } = await supabase.from("users").select("*");
-      if (error) {
-        console.error("Error fetching users:", error.message);
-      } else {
-        console.log("Users fetched:", data);
-        setUsers(data);
-      }
-    }
-    fetchUsers();
-  }, []);
-
   return (
-    <div>
-      <h1>Supabase Connection Test</h1>
-      <ul>
-        {users.length === 0 ? <p>No users found</p> : 
-          users.map((user) => (
-            <li key={user.id}>{user.name} - {user.email}</li>
-          ))
-        }
-      </ul>
-    </div>
+    <Router>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/events">Events</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/events" element={<Events />} />
+      </Routes>
+    </Router>
   );
 }
 
