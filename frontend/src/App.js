@@ -1,17 +1,34 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 
 function App() {
+  const [users, setUsers] = useState([]);
+
   useEffect(() => {
-    async function testDB() {
+    async function fetchUsers() {
       const { data, error } = await supabase.from("users").select("*");
-      if (error) console.error(error);
-      else console.log(data);
+      if (error) {
+        console.error("Error fetching users:", error.message);
+      } else {
+        console.log("Users fetched:", data);
+        setUsers(data);
+      }
     }
-    testDB();
+    fetchUsers();
   }, []);
 
-  return <h1>Supabase Connected (Check Console)</h1>;
+  return (
+    <div>
+      <h1>Supabase Connection Test</h1>
+      <ul>
+        {users.length === 0 ? <p>No users found</p> : 
+          users.map((user) => (
+            <li key={user.id}>{user.name} - {user.email}</li>
+          ))
+        }
+      </ul>
+    </div>
+  );
 }
 
 export default App;
