@@ -3,7 +3,8 @@ import {QRCodeCanvas} from "qrcode.react";
 export default function QRGenerator({ eventId }) {
   if (!eventId) return <p>No Event Selected</p>;
 
-  const checkInURL = `https://localhost:3000/checkin/${eventId}`;
+  const localIP ="192.168.195.185";
+  const checkInURL = `https://${localIP}:3000/checkin/${eventId}`;
 
   return (
     <div>
